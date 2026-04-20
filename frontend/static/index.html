@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Budgeting App</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Budgeting App</p>
+        <h1>Spend with a plan.</h1>
+      </div>
+      <label class="month-picker">
+        Month
+        <input id="monthInput" type="month" />
+      </label>
+    </header>
+
+    <main>
+      <section class="stats-grid" aria-label="Budget summary">
+        <article class="stat">
+          <span>Income</span>
+          <strong id="incomeValue">$0.00</strong>
+        </article>
+        <article class="stat">
+          <span>Expenses</span>
+          <strong id="expenseValue">$0.00</strong>
+        </article>
+        <article class="stat">
+          <span>Cash flow</span>
+          <strong id="cashflowValue">$0.00</strong>
+        </article>
+        <article class="stat">
+          <span>Budgeted</span>
+          <strong id="budgetedValue">$0.00</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form id="transactionForm" class="panel">
+          <h2>Add transaction</h2>
+          <div class="form-grid">
+            <label>
+              Date
+              <input name="date" type="date" required />
+            </label>
+            <label>
+              Type
+              <select name="kind">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </label>
+            <label>
+              Description
+              <input name="description" type="text" placeholder="Groceries" required />
+            </label>
+            <label>
+              Category
+              <input name="category" type="text" placeholder="Food" required />
+            </label>
+            <label>
+              Amount
+              <input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required />
+            </label>
+          </div>
+          <button type="submit">Add transaction</button>
+        </form>
+
+        <form id="budgetForm" class="panel">
+          <h2>Add category budget</h2>
+          <div class="form-grid compact">
+            <label>
+              Category
+              <input name="category" type="text" placeholder="Transport" required />
+            </label>
+            <label>
+              Monthly limit
+              <input name="monthly_limit" type="number" min="0" step="0.01" required />
+            </label>
+          </div>
+          <button type="submit">Add budget</button>
+        </form>
+
+        <form id="goalForm" class="panel">
+          <h2>Add savings goal</h2>
+          <div class="form-grid compact">
+            <label>
+              Name
+              <input name="name" type="text" placeholder="Vacation" required />
+            </label>
+            <label>
+              Target
+              <input name="target_amount" type="number" min="0" step="0.01" required />
+            </label>
+            <label>
+              Saved
+              <input name="saved_amount" type="number" min="0" step="0.01" value="0" required />
+            </label>
+          </div>
+          <button type="submit">Add goal</button>
+        </form>
+
+        <form id="recurringForm" class="panel">
+          <h2>Add recurring item</h2>
+          <div class="form-grid compact">
+            <label>
+              Description
+              <input name="description" type="text" placeholder="Internet" required />
+            </label>
+            <label>
+              Category
+              <input name="category" type="text" placeholder="Utilities" required />
+            </label>
+            <label>
+              Amount
+              <input name="amount" type="number" min="0" step="0.01" required />
+            </label>
+            <label>
+              Type
+              <select name="kind">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </label>
+            <label>
+              Day
+              <input name="day_of_month" type="number" min="1" max="31" value="1" required />
+            </label>
+          </div>
+          <button type="submit">Add recurring item</button>
+        </form>
+      </section>
+
+      <section class="lists">
+        <article>
+          <h2>Budget progress</h2>
+          <div id="budgetList" class="list"></div>
+        </article>
+        <article>
+          <h2>Savings goals</h2>
+          <div id="goalList" class="list"></div>
+        </article>
+        <article>
+          <h2>Upcoming recurring</h2>
+          <div id="recurringList" class="list"></div>
+        </article>
+        <article>
+          <h2>Recent transactions</h2>
+          <div id="transactionList" class="list"></div>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
