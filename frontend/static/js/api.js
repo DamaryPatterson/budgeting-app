@@ -15,11 +15,23 @@ export async function createTransaction(payload) {
   });
 }
 
+export async function deleteTransaction(id) {
+  return request(`/api/transactions/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
 export async function createBudget(payload) {
   return request("/api/budgets", {
     method: "POST",
     headers,
     body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteBudget(id) {
+  return request(`/api/budgets/${encodeURIComponent(id)}`, {
+    method: "DELETE",
   });
 }
 
@@ -31,11 +43,23 @@ export async function createGoal(payload) {
   });
 }
 
+export async function deleteGoal(id) {
+  return request(`/api/goals/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+}
+
 export async function createRecurringItem(payload) {
   return request("/api/recurring-items", {
     method: "POST",
     headers,
     body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteRecurringItem(id) {
+  return request(`/api/recurring-items/${encodeURIComponent(id)}`, {
+    method: "DELETE",
   });
 }
 

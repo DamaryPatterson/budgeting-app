@@ -69,6 +69,7 @@ def get_summary(month: str | None = None) -> dict:
     category_spending = _category_spending(transactions)
     budget_status = [
         {
+            "id": budget["id"],
             "category": budget["category"],
             "monthly_limit": budget["monthly_limit"],
             "spent": category_spending.get(budget["category"], 0),

@@ -1,4 +1,14 @@
-import { createBudget, createGoal, createRecurringItem, createTransaction, getSummary } from "./api.js";
+import {
+  createBudget,
+  createGoal,
+  createRecurringItem,
+  createTransaction,
+  deleteBudget,
+  deleteGoal,
+  deleteRecurringItem,
+  deleteTransaction,
+  getSummary,
+} from "./api.js";
 import { currentMonth, formPayload, numberFields } from "./format.js";
 import { renderSummary } from "./render.js";
 
@@ -14,6 +24,7 @@ monthInput.value = currentMonth();
 forms.transaction.date.valueAsDate = new Date();
 
 monthInput.addEventListener("change", refresh);
+document.addEventListener("click", handleDelete);
 
 forms.transaction.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -52,6 +63,36 @@ async function refresh() {
     console.error(error);
     alert("Something went wrong while loading your budget data.");
   }
+}
+
+async function handleDelete(event) {
+  const button = event.target.closest("[data-delete-type][data-delete-id]");
+  if (!button) {
+    return;
+  }
+
+  const { deleteType, deleteId } = button.dataset;
+  button.disabled = true;
+
+  try {
+    await deleteItem(deleteType, deleteId);
+    await refresh();
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong while deleting that item.");
+    button.disabled = false;
+  }
+}
+
+function deleteItem(type, id) {
+  const actions = {
+    budget: deleteBudget,
+    goal: deleteGoal,
+    recurring: deleteRecurringItem,
+    transaction: deleteTransaction,
+  };
+
+  return actions[type](id);
 }
 
 refresh();

@@ -21,7 +21,10 @@ function renderBudgets(items) {
         <div class="item">
           <div class="item-row">
             <span class="item-title">${escapeHtml(item.category)}</span>
-            <strong class="${remainingClass}">${money.format(item.remaining)}</strong>
+            <div class="item-actions">
+              <strong class="${remainingClass}">${money.format(item.remaining)}</strong>
+              ${deleteButton("budget", item.id, "Delete")}
+            </div>
           </div>
           <p class="item-meta">${money.format(item.spent)} spent of ${money.format(item.monthly_limit)}</p>
           <div class="progress"><span style="width: ${spentPercent}%"></span></div>
@@ -39,7 +42,10 @@ function renderGoals(items) {
         <div class="item">
           <div class="item-row">
             <span class="item-title">${escapeHtml(item.name)}</span>
-            <strong>${item.progress}%</strong>
+            <div class="item-actions">
+              <strong>${item.progress}%</strong>
+              ${deleteButton("goal", item.id, "Delete")}
+            </div>
           </div>
           <p class="item-meta">${money.format(item.saved_amount)} saved of ${money.format(item.target_amount)}</p>
           <div class="progress"><span style="width: ${item.progress}%"></span></div>
@@ -57,7 +63,10 @@ function renderRecurring(items) {
         <div class="item">
           <div class="item-row">
             <span class="item-title">${escapeHtml(item.description)}</span>
-            <strong class="amount ${item.kind}">${money.format(item.amount)}</strong>
+            <div class="item-actions">
+              <strong class="amount ${item.kind}">${money.format(item.amount)}</strong>
+              ${deleteButton("recurring", item.id, "Delete")}
+            </div>
           </div>
           <p class="item-meta">${escapeHtml(item.category)} on day ${item.day_of_month}</p>
         </div>
@@ -74,9 +83,12 @@ function renderTransactions(items) {
         <div class="item">
           <div class="item-row">
             <span class="item-title">${escapeHtml(item.description)}</span>
-            <strong class="amount ${item.kind}">${item.kind === "income" ? "+" : "-"}${money.format(item.amount)}</strong>
+            <div class="item-actions">
+              <strong class="amount ${item.kind}">${item.kind === "income" ? "+" : "-"}${money.format(item.amount)}</strong>
+              ${deleteButton("transaction", item.id, "Delete")}
+            </div>
           </div>
-          <p class="item-meta">${item.date} · ${escapeHtml(item.category)}</p>
+          <p class="item-meta">${item.date} - ${escapeHtml(item.category)}</p>
         </div>
       `,
     )
@@ -94,6 +106,10 @@ function setHtml(id, value) {
 
 function empty(message) {
   return `<p class="empty">${message}</p>`;
+}
+
+function deleteButton(type, id, label) {
+  return `<button class="delete-button" type="button" data-delete-type="${type}" data-delete-id="${escapeHtml(id)}">${label}</button>`;
 }
 
 function escapeHtml(value) {
