@@ -13,24 +13,35 @@ import { currentMonth, formPayload, numberFields } from "./format.js";
 import { renderSummary } from "./render.js";
 
 const monthInput = document.getElementById("monthInput");
+const transactionTypeInput = document.querySelector('#transactionForm [name="kind"]');
+const transactionCategoryInput = document.getElementById("transactionCategory");
 const forms = {
   transaction: document.getElementById("transactionForm"),
   budget: document.getElementById("budgetForm"),
   goal: document.getElementById("goalForm"),
   recurring: document.getElementById("recurringForm"),
 };
+const CATEGORY_OPTIONS = {
+  expense: ["Food", "Housing", "Transport", "Utilities", "Healthcare", "Debt", "Entertainment", "Shopping", "Education", "Other"],
+  income: ["Salary", "Business", "Freelance", "Investments", "Trading", "Gifts", "Refunds", "Other"],
+};
 
 monthInput.value = currentMonth();
 forms.transaction.date.valueAsDate = new Date();
+populateTransactionCategories(transactionTypeInput.value);
 
 monthInput.addEventListener("change", refresh);
 document.addEventListener("click", handleDelete);
+transactionTypeInput.addEventListener("change", () => {
+  populateTransactionCategories(transactionTypeInput.value);
+});
 
 forms.transaction.addEventListener("submit", async (event) => {
   event.preventDefault();
   await createTransaction(numberFields(formPayload(forms.transaction), ["amount"]));
   forms.transaction.reset();
   forms.transaction.date.valueAsDate = new Date();
+  populateTransactionCategories(transactionTypeInput.value);
   await refresh();
 });
 
@@ -93,6 +104,26 @@ function deleteItem(type, id) {
   };
 
   return actions[type](id);
+}
+
+function populateTransactionCategories(kind) {
+  const categories = CATEGORY_OPTIONS[kind] ?? CATEGORY_OPTIONS.expense;
+  const previousValue = transactionCategoryInput.value;
+
+  transactionCategoryInput.innerHTML = categories
+    .map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`)
+    .join("");
+
+  transactionCategoryInput.value = categories.includes(previousValue) ? previousValue : categories[0];
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 refresh();
